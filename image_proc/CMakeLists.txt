@@ -2,9 +2,12 @@ cmake_minimum_required(VERSION 3.0.2)
 project(image_proc)
 
 find_package(catkin REQUIRED)
-
 find_package(catkin REQUIRED cv_bridge dynamic_reconfigure image_geometry image_transport nodelet nodelet_topic_tools roscpp sensor_msgs)
-find_package(OpenCV REQUIRED)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+find_package(OpenCV 4.2 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS thread)
 
 if(cv_bridge_VERSION VERSION_GREATER "1.12.0")

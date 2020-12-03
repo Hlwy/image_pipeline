@@ -6,7 +6,11 @@ generate_dynamic_reconfigure_options(cfg/ImageView.cfg)
 
 catkin_package(CATKIN_DEPENDS dynamic_reconfigure)
 find_package(Boost REQUIRED COMPONENTS thread)
-find_package(OpenCV REQUIRED)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+find_package(OpenCV 4.2 REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIRS}
                     ${catkin_INCLUDE_DIRS}

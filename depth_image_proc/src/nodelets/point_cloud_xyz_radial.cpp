@@ -1,13 +1,13 @@
 /*********************************************************************
  * Software License Agreement (BSD License)
- * 
+ *
  *  Copyright (c) 2008, Willow Garage, Inc.
  *  All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
- * 
+ *
  *   * Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
  *   * Redistributions in binary form must reproduce the above
@@ -17,7 +17,7 @@
  *   * Neither the name of the Willow Garage nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -40,6 +40,7 @@
 #include <depth_image_proc/depth_traits.h>
 
 #include <sensor_msgs/point_cloud2_iterator.h>
+#include <opencv2/calib3d.hpp>
 
 namespace depth_image_proc {
 
@@ -57,15 +58,15 @@ namespace depth_image_proc {
 	typedef sensor_msgs::PointCloud2 PointCloud;
 	ros::Publisher pub_point_cloud_;
 
-	
+
 	std::vector<double> D_;
 	boost::array<double, 9> K_;
-  
+
 	int width_;
 	int height_;
 
 	cv::Mat binned;
-  
+
 	virtual void onInit();
 
 	void connectCb();
@@ -118,7 +119,7 @@ namespace depth_image_proc {
 	}
 	return pixelVectors.reshape(3,width);
     }
-  
+
 
     void PointCloudXyzRadialNodelet::onInit()
     {
@@ -130,7 +131,7 @@ namespace depth_image_proc {
 	private_nh.param("queue_size", queue_size_, 5);
 
 	// Monitor whether anyone is subscribed to the output
-	ros::SubscriberStatusCallback connect_cb = 
+	ros::SubscriberStatusCallback connect_cb =
 	    boost::bind(&PointCloudXyzRadialNodelet::connectCb, this);
 	// Make sure we don't enter connectCb() between advertising and assigning to pub_point_cloud_
 	boost::lock_guard<boost::mutex> lock(connect_mutex_);

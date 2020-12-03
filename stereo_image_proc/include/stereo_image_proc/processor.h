@@ -1,13 +1,13 @@
 /*********************************************************************
 * Software License Agreement (BSD License)
-* 
+*
 *  Copyright (c) 2008, Willow Garage, Inc.
 *  All rights reserved.
-* 
+*
 *  Redistribution and use in source and binary forms, with or without
 *  modification, are permitted provided that the following conditions
 *  are met:
-* 
+*
 *   * Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *   * Redistributions in binary form must reproduce the above
@@ -17,7 +17,7 @@
 *   * Neither the name of the Willow Garage nor the names of its
 *     contributors may be used to endorse or promote products derived
 *     from this software without specific prior written permission.
-* 
+*
 *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -39,6 +39,7 @@
 #include <stereo_msgs/DisparityImage.h>
 #include <sensor_msgs/PointCloud.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <opencv2/calib3d.hpp>
 
 namespace stereo_image_proc {
 
@@ -54,7 +55,7 @@ struct StereoImageSet
 class StereoProcessor
 {
 public:
-  
+
   StereoProcessor()
 #if CV_MAJOR_VERSION >= 3
   {
@@ -166,7 +167,7 @@ public:
 
 private:
   image_proc::Processor mono_processor_;
-  
+
   mutable cv::Mat_<int16_t> disparity16_; // scratch buffer for 16-bit signed disparity image
 #if CV_MAJOR_VERSION >= 3
   mutable cv::Ptr<cv::StereoBM> block_matcher_; // contains scratch buffers for block matching

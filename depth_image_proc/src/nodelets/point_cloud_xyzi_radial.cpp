@@ -1,13 +1,13 @@
 /*********************************************************************
  * Software License Agreement (BSD License)
- * 
+ *
  *  Copyright (c) 2008, Willow Garage, Inc.
  *  All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
- * 
+ *
  *   * Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
  *   * Redistributions in binary form must reproduce the above
@@ -17,7 +17,7 @@
  *   * Neither the name of the Willow Garage nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -44,6 +44,7 @@
 #include <depth_image_proc/depth_traits.h>
 
 #include <sensor_msgs/point_cloud2_iterator.h>
+#include <opencv2/calib3d.hpp>
 
 namespace depth_image_proc {
 
@@ -67,18 +68,18 @@ namespace depth_image_proc {
 	typedef sensor_msgs::PointCloud2 PointCloud;
 	ros::Publisher pub_point_cloud_;
 
-	
+
 	typedef message_filters::Synchronizer<SyncPolicy> Synchronizer;
 	boost::shared_ptr<Synchronizer> sync_;
 
 	std::vector<double> D_;
 	boost::array<double, 9> K_;
-  
+
 	int width_;
 	int height_;
 
 	cv::Mat transform_;
-  
+
 	virtual void onInit();
 
 	void connectCb();
@@ -138,7 +139,7 @@ namespace depth_image_proc {
 	}
 	return pixelVectors.reshape(3,width);
     }
-  
+
 
     void PointCloudXyziRadialNodelet::onInit()
     {
@@ -156,9 +157,9 @@ namespace depth_image_proc {
 	// Synchronize inputs. Topic subscriptions happen on demand in the connection callback.
 	sync_.reset( new Synchronizer(SyncPolicy(queue_size_), sub_depth_, sub_intensity_, sub_info_) );
 	sync_->registerCallback(boost::bind(&PointCloudXyziRadialNodelet::imageCb, this, _1, _2, _3));
-    
+
 	// Monitor whether anyone is subscribed to the output
-	ros::SubscriberStatusCallback connect_cb = 
+	ros::SubscriberStatusCallback connect_cb =
 	    boost::bind(&PointCloudXyziRadialNodelet::connectCb, this);
 	// Make sure we don't enter connectCb() between advertising and assigning to pub_point_cloud_
 	boost::lock_guard<boost::mutex> lock(connect_mutex_);
@@ -181,11 +182,11 @@ namespace depth_image_proc {
 	    ros::NodeHandle& private_nh = getPrivateNodeHandle();
 	    // parameter for depth_image_transport hint
 	    std::string depth_image_transport_param = "depth_image_transport";
-	
+
 	    // depth image can use different transport.(e.g. compressedDepth)
 	    image_transport::TransportHints depth_hints("raw",ros::TransportHints(), private_nh, depth_image_transport_param);
 	    sub_depth_.subscribe(*depth_it_, "image_raw",       5, depth_hints);
-	
+
 	    // intensity uses normal ros transport hints.
 	    image_transport::TransportHints hints("raw", ros::TransportHints(), private_nh);
 	    sub_intensity_.subscribe(*intensity_it_,   "image_raw", 5, hints);
@@ -270,7 +271,7 @@ namespace depth_image_proc {
 	sensor_msgs::PointCloud2Iterator<float> iter_y(*cloud_msg, "y");
 	sensor_msgs::PointCloud2Iterator<float> iter_z(*cloud_msg, "z");
 	const T* depth_row = reinterpret_cast<const T*>(&depth_msg->data[0]);
-    
+
 	int row_step   = depth_msg->step / sizeof(T);
 	for (int v = 0; v < (int)cloud_msg->height; ++v, depth_row += row_step)
 	{

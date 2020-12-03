@@ -3,7 +3,10 @@ project(image_publisher)
 
 find_package(catkin REQUIRED COMPONENTS cv_bridge dynamic_reconfigure camera_info_manager sensor_msgs image_transport nodelet roscpp)
 
-find_package(OpenCV REQUIRED COMPONENTS core)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+find_package(OpenCV 4.2 REQUIRED COMPONENTS core imgcodecs videoio)
 message(STATUS "opencv version ${OpenCV_VERSION}")
 if(OpenCV_VERSION VERSION_LESS "4.0.0")
   find_package(OpenCV 3 REQUIRED COMPONENTS core imgcodecs videoio)

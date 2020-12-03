@@ -5,10 +5,12 @@ find_package(catkin REQUIRED COMPONENTS cmake_modules cv_bridge dynamic_reconfig
 
 # generate the dynamic_reconfigure config file
 generate_dynamic_reconfigure_options(cfg/ImageRotate.cfg)
-
 catkin_package()
 
-find_package(OpenCV REQUIRED core imgproc)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+find_package(OpenCV 4.2 REQUIRED core imgproc)
 
 # add the executable
 include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})

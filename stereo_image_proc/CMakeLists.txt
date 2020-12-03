@@ -19,7 +19,10 @@ catkin_package(
 
 include_directories(include)
 
-find_package(OpenCV REQUIRED)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+find_package(OpenCV 4.2 REQUIRED)
 include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 # See note in image_proc/CMakeLists.txt
